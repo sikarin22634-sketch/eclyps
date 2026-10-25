@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09090c">
+  <title>ECLYPS — Enter the Dark Side</title>
+  <meta name="description" content="ECLYPS โลกแห่งอนิเมะสำหรับผู้ที่หลงใหลในความมืด">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #09090c;
+      --panel: #121217;
+      --panel-light: #1a1a22;
+      --red: #e5243b;
+      --red-dark: #a80e27;
+      --text: #f6f4f5;
+      --muted: #9996a3;
+      --line: rgba(255,255,255,.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      height: 76px;
+      padding: 0 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: rgba(9,9,12,.94);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+    }
+
+    .logo {
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .logo span { color: var(--red); }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: #c5c1cc;
+      font-size: 14px;
+    }
+
+    .nav a:hover, .nav a.active { color: white; }
+
+    .search {
+      width: min(240px, 25vw);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 13px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: white;
+      background: transparent;
+      font-size: 13px;
+    }
+
+    .search input::placeholder { color: #777481; }
+
+    .hero {
+      min-height: 480px;
+      padding: 72px 8%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 78% 42%, rgba(229,36,59,.26), transparent 35%),
+        radial-gradient(ellipse at 88% 100%, rgba(113,12,40,.3), transparent 42%),
+        linear-gradient(100deg, #111116 0%, #111116 38%, #190d14 72%, #09090c 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::after {
+      content: "E";
+      position: absolute;
+      right: 10%;
+      top: 50%;
+      transform: translateY(-54%) rotate(-8deg);
+      font-size: clamp(260px, 38vw, 490px);
+      font-weight: 800;
+      line-height: 1;
+      color: rgba(229,36,59,.09);
+      text-shadow: 0 0 100px rgba(229,36,59,.12);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 610px; }
+
+    .eyebrow {
+      color: #ff6678;
+      letter-spacing: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(44px, 7vw, 78px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: 2px;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--red);
+      text-shadow: 0 0 35px rgba(229,36,59,.2);
+    }
+
+    .hero p {
+      max-width: 430px;
+      color: #c0bbc7;
+      line-height: 1.9;
+      font-size: 14px;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 7px;
+      padding: 12px 21px;
+      color: white;
+      font-weight: 500;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      box-shadow: 0 5px 25px rgba(229,36,59,.2);
+    }
+
+    .btn-primary:hover { background: #ff3049; transform: translateY(-2px); }
+
+    .btn-secondary { background: rgba(255,255,255,.05); border-color: var(--line); }
+    .btn-secondary:hover { background: rgba(255,255,255,.11); }
+
+    main { padding: 42px 6% 70px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .section-title { margin: 0; font-size: 24px; font-weight: 600; }
+    .section-title span { color: var(--red); }
+    .section-subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0 25px; }
+
+    .filter {
+      padding: 8px 15px;
+      color: #bdb9c5;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .filter:hover, .filter.active {
+      color: white;
+      border-color: var(--red);
+      background: rgba(229,36,59,.13);
+    }
+
+    .anime-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 20px 15px;
+    }
+
+    .anime-card { min-width: 0; cursor: pointer; }
+
+    .poster {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--poster-bg, linear-gradient(145deg,#34101b,#111116 70%));
+      isolation: isolate;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 33%, var(--glow, rgba(229,36,59,.6)), transparent 38%),
+        linear-gradient(180deg, transparent 35%, rgba(0,0,0,.15) 48%, #08080c 100%);
+      z-index: -1;
+    }
+
+    .poster::after {
+      content: attr(data-symbol);
+      position: absolute;
+      top: 16%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(70px, 9vw, 125px);
+      font-weight: 800;
+      color: rgba(255,255,255,.15);
+      text-shadow: 0 0 35px var(--glow, rgba(229,36,59,.3));
+    }
+
+    .poster-word {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 28px;
+      text-align: center;
+      font-size: clamp(15px, 1.8vw, 23px);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 15px #000;
+    }
+
+    .poster-tag {
+      position: absolute;
+      top: 9px;
+      left: 9px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      background: var(--red);
+      color: white;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .poster-rating {
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      background: rgba(0,0,0,.65);
+      font-size: 10px;
+    }
+
+    .anime-card:hover .poster {
+      transform: translateY(-5px);
+      border-color: rgba(229,36,59,.7);
+    }
+
+    .anime-name { margin: 11px 0 4px; font-size: 14px; font-weight: 500; }
+    .anime-meta { color: var(--muted); font-size: 11px; }
+    .anime-card[hidden] { display: none; }
+
+    .empty {
+      display: none;
+      color: var(--muted);
+      text-align: center;
+      padding: 45px 10px;
+    }
+
+    .empty.show { display: block; }
+
+    .notice {
+      margin-top: 44px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--red);
+      border-radius: 8px;
+      background: var(--panel);
+      color: #bcb8c4;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    footer {
+      padding: 25px 6%;
+      border-top: 1px solid var(--line);
+      color: #777481;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-box {
+      width: min(440px, 100%);
+      padding: 25px;
+      background: #15151c;
+      border: 1px solid rgba(229,36,59,.35);
+      border-radius: 12px;
+      box-shadow: 0 20px 80px rgba(0,0,0,.5);
+    }
+
+    .modal-box h2 { margin-top: 0; }
+    .modal-box p { color: #c0bbc7; font-size: 13px; line-height: 1.9; }
+    .modal-close { float: right; background: none; border: 0; color: white; font-size: 23px; }
+
+    @media (max-width: 950px) {
+      .anime-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .nav { gap: 15px; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar { height: auto; min-height: 68px; padding: 14px 5%; flex-wrap: wrap; }
+      .logo { font-size: 24px; }
+      .nav { order: 3; width: 100%; justify-content: space-between; font-size: 12px; }
+      .search { width: 48%; }
+      .hero { min-height: 410px; padding: 52px 6%; }
+      .hero::after { right: -18%; opacity: .7; }
+      main { padding: 32px 5% 50px; }
+      .anime-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px 12px; }
+      .section-title { font-size: 21px; }
+      .poster-word { font-size: 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="logo" href="#" aria-label="ECLYPS home">ECLY<span>PS</span></a>
+
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a class="active" href="#">หน้าแรก</a>
+      <a href="#anime">อนิเมะทั้งหมด</a>
+      <a href="#latest">มาใหม่</a>
+    </nav>
+
+    <label class="search">
+      <span aria-hidden="true">⌕</span>
+      <input id="searchInput" type="search" placeholder="ค้นหาอนิเมะ..." aria-label="ค้นหาอนิเมะ">
+    </label>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">A NEW WORLD OF ANIME</div>
+      <h1>ENTER THE <span>DARK SIDE</span></h1>
+      <p>
+        ยินดีต้อนรับสู่ ECLYPS — พื้นที่สำหรับผู้หลงใหลในอนิเมะ
+        โลกที่ความมืด ความลึกลับ และจินตนาการมาบรรจบกัน
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#anime">⌕ &nbsp; สำรวจอนิเมะ</a>
+        <button class="btn btn-secondary" id="aboutBtn">เกี่ยวกับ ECLYPS</button>
+      </div>
+    </div>
+  </section>
+
+  <main id="anime">
+    <section id="latest">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">ANIME <span>COLLECTION</span></h2>
+          <div class="section-subtitle">ค้นพบเรื่องราวที่รอให้คุณเปิดประตูเข้าไป</div>
+        </div>
+      </div>
+
+      <div class="filters" aria-label="กรองหมวดหมู่">
+        <button class="filter active" data-filter="all">ทั้งหมด</button>
+        <button class="filter" data-filter="action">แอ็กชัน</button>
+        <button class="filter" data-filter="fantasy">แฟนตาซี</button>
+        <button class="filter" data-filter="sci-fi">ไซไฟ</button>
+        <button class="filter" data-filter="mystery">ลึกลับ</button>
+      </div>
+
+      <div class="anime-grid" id="animeGrid">
+        <article class="anime-card" data-category="action fantasy" data-name="crimson oath">
+          <div class="poster" data-symbol="血" style="--poster-bg:linear-gradient(145deg,#601426,#180b16 65%);--glow:rgba(255,30,65,.7)">
+            <span class="poster-tag">แนะนำ</span><span class="poster-rating">★ 9.2</span>
+            <div class="poster-word">CRIMSON OATH</div>
+          </div>
+          <div class="anime-name">Crimson Oath</div>
+          <div class="anime-meta">แอ็กชัน · แฟนตาซี · ตัวอย่าง</div>
+        </article>
+
+        <article class="anime-card" data-category="sci-fi mystery" data-name="neon paradox">
+          <div class="poster" data-symbol="∞" style="--poster-bg:linear-gradient(145deg,#153b56,#171025 70%);--glow:rgba(41,170,255,.6)">
+            <span class="poster-tag">ไซไฟ</span><span class="poster-rating">★ 8.9</span>
+            <div class="poster-word">NEON PARADOX</div>
+          </div>
+          <div class="anime-name">Neon Paradox</div>
+          <div class="anime-meta">ไซไฟ · ลึกลับ · ตัวอย่าง</div>
+        </article>
+
+        <article class="anime-card" data-category="fantasy mystery" data-name="moonveil">
+          <div class="poster" data-symbol="☾" style="--poster-bg:linear-gradient(145deg,#35245e,#11101b 70%);--glow:rgba(156,106,255,.6)">
+            <span class="poster-tag">แฟนตาซี</span><span class="poster-rating">★ 9.0</span>
+            <div class="poster-word">MOONVEIL</div>
+          </div>
+          <div class="anime-name">Moonveil</div>
+          <div class="anime-meta">แฟนตาซี · ลึกลับ · ตัวอย่าง</div>
+        </article>
+
+        <article class="anime-card" data-category="action sci-fi" data-name="zero protocol">
+          <div class="poster" data-symbol="ゼロ" style="--poster-bg:linear-gradient(145deg,#174c48,#10151b 70%);--glow:rgba(41,226,177,.5)">
+            <span class="poster-tag">มาใหม่</span><span class="poster-rating">★ 8.7</span>
+            <div class="poster-word">ZERO PROTOCOL</div>
+          </div>
+          <div class="anime-name">Zero Protocol</div>
+          <div class="anime-meta">แอ็กชัน · ไซไฟ · ตัวอย่าง</div>
+        </article>
+
+        <article class="anime-card" data-category="action mystery" data-name="silent requiem">
+          <div class="poster" data-symbol="影" style="--poster-bg:linear-gradient(145deg,#4b2430,#101015 70%);--glow:rgba(221,65,92,.55)">
+            <span class="poster-tag">ดาร์ก</span><span class="poster-rating">★ 9.1</span>
+            <div class="poster-word">SILENT REQUIEM</div>
+          </div>
+          <div class="anime-name">Silent Requiem</div>
+          <div class="anime-meta">แอ็กชัน · ลึกลับ · ตัวอย่าง</div>
+        </article>
+
+        <article class="anime-card" data-category="fantasy action" data-name="ashen crown">
+          <div class="poster" data-symbol="♜" style="--poster-bg:linear-gradient(145deg,#64431e,#171016 70%);--glow:rgba(244,171,59,.55)">
+            <span class="poster-tag">แฟนตาซี</span><span class="poster-rating">★ 8.8</span>
+            <div class="poster-word">ASHEN CROWN</div>
+          </div>
+          <div class="anime-name">Ashen Crown</div>
+          <div class="anime-meta">แฟนตาซี · แอ็กชัน · ตัวอย่าง</div>
+        </article>
+      </div>
+
+      <div class="empty" id="emptyState">ไม่พบอนิเมะที่ตรงกับคำค้นหา ลองค้นหาคำอื่นดูนะ</div>
+
+      <div class="notice">
+        <strong style="color:#f6f4f5">หมายเหตุสำหรับต้นแบบ</strong><br>
+        รายการทั้งหมดบนหน้านี้เป็นตัวอย่างที่สร้างขึ้นเพื่อทดสอบหน้าตาเว็บไซต์
+        ยังไม่มีวิดีโอจริงหรือระบบสมาชิก ข้อมูลและภาพโปสเตอร์เป็นงานตกแต่งชั่วคราว
+        ก่อนเผยแพร่จริง ควรเพิ่มเฉพาะเนื้อหาที่ได้รับอนุญาตให้เผยแพร่เท่านั้น
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span class="logo">ECLY<span>PS</span></span>
+    <span>ENTER THE DARK SIDE · © <span id="year"></span> ECLYPS</span>
+  </footer>
+
+  <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <button class="modal-close" id="closeModal" aria-label="ปิดหน้าต่าง">×</button>
+      <h2 id="modalTitle">WELCOME TO ECLYPS</h2>
+      <p>
+        ECLYPS คือแนวคิดเว็บไซต์อนิเมะธีม Dark Premium
+        ที่ออกแบบให้ค้นหาเรื่องโปรดได้ง่าย พร้อมต่อยอดเป็นระบบสมาชิก
+        รายการโปรด และระบบแอดมินในอนาคต
+      </p>
+      <button class="btn btn-primary" id="modalOk">เข้าใจแล้ว</button>
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const cards = [...document.querySelectorAll('.anime-card')];
+    const filters = [...document.querySelectorAll('.filter')];
+    const emptyState = document.getElementById('emptyState');
+
+    let activeCategory = 'all';
+
+    function filterAnime() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const category = card.dataset.category;
+        const matchesSearch = name.includes(query);
+        const matchesCategory = activeCategory === 'all' ||
+          category.split(' ').includes(activeCategory);
+        const visible = matchesSearch && matchesCategory;
+
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      });
+
+      emptyState.classList.toggle('show', visibleCount === 0);
+    }
+
+    searchInput.addEventListener('input', filterAnime);
+
+    filters.forEach(button => {
+      button.addEventListener('click', () => {
+        activeCategory = button.dataset.filter;
+        filters.forEach(item => item.classList.toggle('active', item === button));
+        filterAnime();
+      });
+    });
+
+    const modal = document.getElementById('infoModal');
+
+    document.getElementById('aboutBtn').addEventListener('click', () => {
+      modal.classList.add('show');
+    });
+
+    function closeModal() {
+      modal.classList.remove('show');
+    }
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('modalOk').addEventListener('click', closeModal);
+
+    modal.addEventListener('click', event => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
